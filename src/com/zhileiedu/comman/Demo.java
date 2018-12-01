@@ -3,6 +3,7 @@ package com.zhileiedu.comman;
 
 public class Demo {
     public void demo1() {
+        System.out.println(10/0);
         System.out.println("demo1");
     }
 

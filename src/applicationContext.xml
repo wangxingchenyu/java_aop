@@ -7,15 +7,26 @@
         http://www.springframework.org/schema/aop
         http://www.springframework.org/schema/aop/spring-aop.xsd">
 
-    <bean id="mybefore" class="com.zhileiedu.advice.MyBeforeAdvice"></bean>
-    <bean id="myafter" class="com.zhileiedu.advice.MyAfterAdvice"></bean>
+    <!--<bean id="mybefore" class="com.zhileiedu.advice.MyBeforeAdvice"></bean>-->
+    <!--<bean id="myafter" class="com.zhileiedu.advice.MyAfterAdvice"></bean>-->
+    <!--<aop:config>-->
+    <!--<aop:pointcut id="m" expression="execution(* com.zhileiedu.comman.*.*(..))"></aop:pointcut>-->
+    <!--<aop:advisor advice-ref="mybefore" pointcut-ref="m"/>-->
+    <!--<aop:advisor advice-ref="myafter" pointcut-ref="m"/>-->
+    <!--</aop:config>-->
+    <!--<bean id="demo" class="com.zhileiedu.comman.Demo"/>-->
+    <!--<bean id="mydemo" class="com.zhileiedu.comman.MyDemo"/>-->
+
+    <bean id="myExceptionClass" class="com.zhileiedu.advice.MyThrowAdvice"/>
+
     <aop:config>
-        <aop:pointcut id="m" expression="execution(* com.zhileiedu.comman.*.*(..))"></aop:pointcut>
-        <aop:advisor advice-ref="mybefore" pointcut-ref="m"/>
-        <aop:advisor advice-ref="myafter" pointcut-ref="m"/>
+        <aop:aspect ref="myExceptionClass">
+            <aop:pointcut id="mypontcout" expression="execution(* com.zhileiedu.comman.Demo.demo1())"/>
+            <aop:after-throwing method="MyException" pointcut-ref="mypontcout"/>
+        </aop:aspect>
     </aop:config>
     <bean id="demo" class="com.zhileiedu.comman.Demo"/>
-    <bean id="mydemo" class="com.zhileiedu.comman.MyDemo"/>
+
 </beans>
 
         <!--
@@ -39,3 +50,20 @@
         ps:如果看返回只是能从after里面内容获取因为，这个时候整个方法才能结束
 
         -->
+
+
+<!--
+
+<bean id="myExceptionClass" class="com.zhileiedu.advice.MyThrowAdvice"/>
+
+    <aop:config>
+        <aop:aspect ref="myExceptionClass"> //这里面指向的是异常的类，就是上面Bean的id
+            <aop:pointcut id="mypontcout" expression="execution(* com.zhileiedu.comman.Demo.demo1())"/>
+            <aop:after-throwing method="MyException" pointcut-ref="mypontcout"/>
+        </aop:aspect>
+    </aop:config>
+
+
+
+
+-->

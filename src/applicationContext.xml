@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/aop
+        http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <bean id="mybefore" class="com.zhileiedu.advice.MyBeforeAdvice"></bean>
+    <bean id="myafter" class="com.zhileiedu.advice.MyAfterAdvice"></bean>
+    <aop:config>
+        <aop:pointcut id="m" expression="execution(* com.zhileiedu.comman.*.*(..))"></aop:pointcut>
+        <aop:advisor advice-ref="mybefore" pointcut-ref="m"/>
+        <aop:advisor advice-ref="myafter" pointcut-ref="m"/>
+    </aop:config>
+    <bean id="demo" class="com.zhileiedu.comman.Demo"/>
+    <bean id="mydemo" class="com.zhileiedu.comman.MyDemo"/>
+</beans>
+
+        <!--
+        面向切面的编程:(AOP)
+
+        * 表示任意的类 或者是任意的方法，".." 表示任意的参数
+
+        例子:
+         <aop:pointcut id="m" expression="execution(* com.zhileiedu.comman.*.*(..))"></aop:pointcut>
+
+        public void afterReturning(Object returnValue, Method method, Object[] args, Object target)\
+
+        第一个参数是该方法的返回值
+
+        第二个是方法的对象
+
+        第三个参数是参数的数组
+
+        第四个是该方法类的对象
+
+        ps:如果看返回只是能从after里面内容获取因为，这个时候整个方法才能结束
+
+        -->

@@ -51,15 +51,15 @@
 
     <!--&lt;!&ndash;aspectj用法&ndash;&gt;-->
     <!--<aop:config>-->
-        <!--<aop:aspect ref="aj1">-->
-            <!--<aop:pointcut id="mypoint" expression="execution(* com.zhileiedu.comman.Demo.demo1())"/>-->
-            <!--&lt;!&ndash;<aop:before method="before" pointcut-ref="mypoint"></aop:before>&ndash;&gt;-->
-            <!--&lt;!&ndash;<aop:after method="after"&ndash;&gt;-->
-                       <!--&lt;!&ndash;pointcut-ref="mypoint"></aop:after>   &lt;!&ndash;after after-returnning 两者区别就是after无论什么是否有异常都会执行&ndash;&gt;&ndash;&gt;-->
-            <!--&lt;!&ndash;<aop:after-returning method="after1" pointcut-ref="mypoint"></aop:after-returning>&ndash;&gt;-->
-            <!--<aop:after-throwing method="thorw" pointcut-ref="mypoint"></aop:after-throwing>-->
-            <!--<aop:around method="arround" pointcut-ref="mypoint"/>-->
-        <!--</aop:aspect>-->
+    <!--<aop:aspect ref="aj1">-->
+    <!--<aop:pointcut id="mypoint" expression="execution(* com.zhileiedu.comman.Demo.demo1())"/>-->
+    <!--&lt;!&ndash;<aop:before method="before" pointcut-ref="mypoint"></aop:before>&ndash;&gt;-->
+    <!--&lt;!&ndash;<aop:after method="after"&ndash;&gt;-->
+    <!--&lt;!&ndash;pointcut-ref="mypoint"></aop:after>   &lt;!&ndash;after after-returnning 两者区别就是after无论什么是否有异常都会执行&ndash;&gt;&ndash;&gt;-->
+    <!--&lt;!&ndash;<aop:after-returning method="after1" pointcut-ref="mypoint"></aop:after-returning>&ndash;&gt;-->
+    <!--<aop:after-throwing method="thorw" pointcut-ref="mypoint"></aop:after-throwing>-->
+    <!--<aop:around method="arround" pointcut-ref="mypoint"/>-->
+    <!--</aop:aspect>-->
     <!--</aop:config>-->
     <!--&lt;!&ndash;这里面的执行顺序跟代码书写顺序有关，也就是说如果after after-throwing&ndash;&gt;-->
     <!--<bean id="demo" class="com.zhileiedu.comman.Demo"/>-->
@@ -70,14 +70,31 @@
     <!--&lt;!&ndash;必须开启cglib代理才能执行&ndash;&gt;-->
     <!--<aop:aspectj-autoproxy expose-proxy="true"></aop:aspectj-autoproxy>-->
 
-    <bean id="mybefore" class="com.zhileiedu.advice.MyAspectJ"></bean>
-    <aop:config>
-        <aop:aspect ref="mybefore">
-            <aop:pointcut id="mypoint" expression="execution(* com.zhileiedu.comman.Demo.demo1(int,String)) and args(age,name)"></aop:pointcut>
-            <aop:before method="before" pointcut-ref="mypoint" arg-names="age,name"/> <!--这里面的age,name名字必须写before方法里面的参数名称相同，否则报错,其实就是切点传给之前-->
-        </aop:aspect>
-    </aop:config>
-    <bean id="demo"  class="com.zhileiedu.comman.Demo"></bean>
+    <!--<bean id="mybefore" class="com.zhileiedu.advice.MyAspectJ"></bean>-->
+    <!--<aop:config>-->
+    <!--<aop:aspect ref="mybefore">-->
+    <!--<aop:pointcut id="mypoint" expression="execution(* com.zhileiedu.comman.Demo.demo1(int,String)) and args(age,name)"></aop:pointcut>-->
+    <!--<aop:before method="before" pointcut-ref="mypoint" arg-names="age,name"/> &lt;!&ndash;这里面的age,name名字必须写before方法里面的参数名称相同，否则报错,其实就是切点传给之前&ndash;&gt;-->
+    <!--</aop:aspect>-->
+    <!--</aop:config>-->
+
+    <!--<bean id="demo1" class="com.zhileiedu.comman.Demo1">-->
+    <!--利用索引-->
+    <!--<constructor-arg index="0" value="alex"></constructor-arg>-->
+    <!--<constructor-arg index="1" value="18"></constructor-arg>-->
+    <!--利用参数名或是索引 或者得数据类型来确认走的是哪个方法-->
+    <!--<constructor-arg index="0" name="username" type="java.lang.String" value="雷哥"></constructor-arg>-->
+    <!--<constructor-arg index="1" name="age" type="int" value="19"></constructor-arg>-->
+
+    <!--</bean>-->
+
+    <!--实例工厂-->
+    <bean id="myfactory" class="com.zhileiedu.factory.Myfactory"></bean>
+    <bean id="peo1" factory-bean="myfactory" factory-method="newInstance"></bean>
+
+    <!--静态工厂-->
+    <bean id="peo2" class="com.zhileiedu.factory.Myfactory" factory-method="newInstance1"/>
+
 </beans>
 
         <!--

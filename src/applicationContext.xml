@@ -2,10 +2,14 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/aop
-        http://www.springframework.org/schema/aop/spring-aop.xsd">
+        http://www.springframework.org/schema/aop/spring-aop.xsd
+         http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+    ">
 
     <!--<bean id="mybefore" class="com.zhileiedu.advice.MyBeforeAdvice"></bean>-->
     <!--<bean id="myafter" class="com.zhileiedu.advice.MyAfterAdvice"></bean>-->
@@ -17,16 +21,63 @@
     <!--<bean id="demo" class="com.zhileiedu.comman.Demo"/>-->
     <!--<bean id="mydemo" class="com.zhileiedu.comman.MyDemo"/>-->
 
-    <bean id="myExceptionClass" class="com.zhileiedu.advice.MyThrowAdvice"/>
+    <!--<bean id="myExceptionClass" class="com.zhileiedu.advice.MyThrowAdvice"/>-->
 
+    <!--<aop:config>-->
+    <!--<aop:aspect ref="myExceptionClass">-->
+    <!--<aop:pointcut id="mypontcout" expression="execution(* com.zhileiedu.comman.Demo.demo1())"/>-->
+    <!--<aop:after-throwing method="MyException" pointcut-ref="mypontcout"-->
+    <!--throwing="e1"/> &lt;!&ndash;throwing必须跟处理方法的参数名相同&ndash;&gt;-->
+    <!--</aop:aspect>-->
+    <!--</aop:config>-->
+    <!--<bean id="demo" class="com.zhileiedu.comman.Demo"/>-->
+    <!--bash-schema异常通知-->
+    <!--<bean id="af" class="com.zhileiedu.advice.AfterThrowing"/>-->
+    <!--<aop:config>-->
+    <!--<aop:pointcut id="myponint" expression="execution(* com.zhileiedu.comman.Demo.demo1())"/>-->
+    <!--<aop:advisor advice-ref="af" pointcut-ref="myponint"/>-->
+    <!--</aop:config>-->
+    <!--<bean id="demo" class="com.zhileiedu.comman.Demo"></bean>-->
+
+    <!--环绕通知-->
+    <!--<bean id="round" class="com.zhileiedu.advice.MyArrrond"></bean>-->
+    <!--<aop:config>-->
+    <!--<aop:pointcut id="mypoint" expression="execution(* com.zhileiedu.comman.Demo.demo1())"></aop:pointcut>-->
+    <!--<aop:advisor advice-ref="round"  pointcut-ref="mypoint"/>-->
+    <!--</aop:config>-->
+
+
+    <!--<bean id="aj1" class="com.zhileiedu.advice.AspectJ1"></bean>-->
+
+    <!--&lt;!&ndash;aspectj用法&ndash;&gt;-->
+    <!--<aop:config>-->
+        <!--<aop:aspect ref="aj1">-->
+            <!--<aop:pointcut id="mypoint" expression="execution(* com.zhileiedu.comman.Demo.demo1())"/>-->
+            <!--&lt;!&ndash;<aop:before method="before" pointcut-ref="mypoint"></aop:before>&ndash;&gt;-->
+            <!--&lt;!&ndash;<aop:after method="after"&ndash;&gt;-->
+                       <!--&lt;!&ndash;pointcut-ref="mypoint"></aop:after>   &lt;!&ndash;after after-returnning 两者区别就是after无论什么是否有异常都会执行&ndash;&gt;&ndash;&gt;-->
+            <!--&lt;!&ndash;<aop:after-returning method="after1" pointcut-ref="mypoint"></aop:after-returning>&ndash;&gt;-->
+            <!--<aop:after-throwing method="thorw" pointcut-ref="mypoint"></aop:after-throwing>-->
+            <!--<aop:around method="arround" pointcut-ref="mypoint"/>-->
+        <!--</aop:aspect>-->
+    <!--</aop:config>-->
+    <!--&lt;!&ndash;这里面的执行顺序跟代码书写顺序有关，也就是说如果after after-throwing&ndash;&gt;-->
+    <!--<bean id="demo" class="com.zhileiedu.comman.Demo"/>-->
+
+
+    <!--注解配置方法,由于spring默认不确认哪些包或者哪些类需要注解，所以需要确实扫描的包,类-->
+    <!--<context:component-scan base-package="com.zhileiedu.advice,com.zhileiedu.comman" />-->
+    <!--&lt;!&ndash;必须开启cglib代理才能执行&ndash;&gt;-->
+    <!--<aop:aspectj-autoproxy expose-proxy="true"></aop:aspectj-autoproxy>-->
+
+    <bean id="mybefore" class="com.zhileiedu.advice.MyAspectJ"></bean>
     <aop:config>
-        <aop:aspect ref="myExceptionClass">
-            <aop:pointcut id="mypontcout" expression="execution(* com.zhileiedu.comman.Demo.demo1())"/>
-            <aop:after-throwing method="MyException" pointcut-ref="mypontcout"/>
+        <aop:aspect ref="mybefore">
+            <aop:pointcut id="mypoint" expression="execution(* com.zhileiedu.comman.Demo.demo1(int,String)) and args(age,name)"></aop:pointcut>
+            <aop:before method="before" pointcut-ref="mypoint" arg-names="age,name"/> <!--这里面的age,name名字必须写before方法里面的参数名称相同，否则报错,其实就是切点传给之前-->
         </aop:aspect>
     </aop:config>
-    <bean id="demo" class="com.zhileiedu.comman.Demo"/>
-
+    <bean id="demo"  class="com.zhileiedu.comman.Demo"></bean>
 </beans>
 
         <!--
@@ -52,18 +103,20 @@
         -->
 
 
-<!--
+        <!--
 
-<bean id="myExceptionClass" class="com.zhileiedu.advice.MyThrowAdvice"/>
+        aspectj 异常通知
+        <bean id="myExceptionClass" class="com.zhileiedu.advice.MyThrowAdvice"/>
 
-    <aop:config>
-        <aop:aspect ref="myExceptionClass"> //这里面指向的是异常的类，就是上面Bean的id
-            <aop:pointcut id="mypontcout" expression="execution(* com.zhileiedu.comman.Demo.demo1())"/>
-            <aop:after-throwing method="MyException" pointcut-ref="mypontcout"/>
-        </aop:aspect>
-    </aop:config>
+            <aop:config>
+                <aop:aspect ref="myExceptionClass"> //这里面指向的是异常的类，就是上面Bean的id
+                    <aop:pointcut id="mypontcout" expression="execution(* com.zhileiedu.comman.Demo.demo1())"/>
+                    <aop:after-throwing method="MyException" pointcut-ref="mypontcout"/>
+                </aop:aspect>
+            </aop:config>
+
+        schema-basse异常通知
 
 
 
-
--->
+        -->
